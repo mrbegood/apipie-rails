@@ -27,9 +27,10 @@ module Apipie
         MethodDescription::Api.new(mthd, concern_subst(path), concern_subst(desc), opts)
       end
 
-      desc = dsl_data[:description] || ''
-      @full_description = Apipie.markup_to_html(desc)
-
+      # desc = dsl_data[:description] || ''
+      # @full_description = Apipie.markup_to_html(desc)
+      @full_description = dsl_data[:description] || ''
+      
       @errors = dsl_data[:errors].map do |args|
         Apipie::ErrorDescription.from_dsl_data(args)
       end
@@ -144,7 +145,7 @@ module Apipie
         :name => @method,
         :apis => method_apis_to_json(lang),
         :formats => formats,
-        :full_description => Apipie.app.translate(@full_description, lang),
+        :full_description => Apipie.markup_to_html(Apipie.app.translate(@full_description, lang)),
         :errors => errors.map(&:to_json),
         :params => params_ordered.map{ |param| param.to_json(lang) }.flatten,
         :examples => @examples,
